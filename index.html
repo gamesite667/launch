@@ -197,14 +197,27 @@
       margin: 0 0 12px;
     }
 
-    .wotg-game {
+    .wotg-play-btn {
       font-size: 2rem;
       font-weight: 800;
-      margin: 8px 0;
+      margin: 12px 0;
+      padding: 16px 32px;
       background: linear-gradient(135deg, #7c9cff, #36d399);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      color: white;
+      border: none;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 24px rgba(124, 156, 255, 0.4);
+    }
+
+    .wotg-play-btn:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(124, 156, 255, 0.6);
+    }
+
+    .wotg-play-btn:active {
+      transform: translateY(-2px);
     }
 
     .wotg-countdown {
@@ -590,7 +603,7 @@
 
     <div id="wotgBanner" class="wotg-banner">
       <div class="wotg-title">🏆 Game of the Week</div>
-      <div class="wotg-game" id="wotgName">Loading...</div>
+      <button id="wotgPlayBtn" class="wotg-play-btn" onclick="playGameOfWeek()">Loading...</button>
       <div class="wotg-countdown" id="wotgCountdown"></div>
     </div>
 
@@ -925,6 +938,13 @@
       return allGames[index];
     }
 
+    function playGameOfWeek() {
+      const wotg = getGameOfWeek();
+      if (wotg) {
+        launchGame(wotg.url, wotg.title);
+      }
+    }
+
     function updateGameOfWeek() {
       const wotg = getGameOfWeek();
       if (!wotg) {
@@ -932,7 +952,7 @@
         return;
       }
 
-      document.getElementById('wotgName').textContent = wotg.title;
+      document.getElementById('wotgPlayBtn').textContent = wotg.title;
       
       const msPerWeek = 7 * 24 * 60 * 60 * 1000;
       const epoch = new Date('2024-01-01').getTime();
