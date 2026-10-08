@@ -51,6 +51,10 @@
     button:active {
       transform: scale(0.95);
     }
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
     .loading {
       display: none;
       margin-top: 20px;
@@ -90,10 +94,14 @@
       btn.disabled = true;
       loading.style.display = 'block';
 
-      const siteUrl = 'https://raw.githubusercontent.com/gamesite667/launch/main/index.html';
+      // Point to the actual game hub (the one with games, not this launcher)
+      const siteUrl = 'https://raw.githubusercontent.com/gamesite667/launch/main/hub.html';
 
       fetch(siteUrl)
-        .then(r => r.text())
+        .then(r => {
+          if (!r.ok) throw new Error('Hub not found');
+          return r.text();
+        })
         .then(html => {
           const w = window.open('about:blank');
           if (!w) {
@@ -109,7 +117,7 @@
         })
         .catch(err => {
           console.error(err);
-          alert('Failed to load hub. Please try again.');
+          alert('Failed to load hub. Make sure hub.html exists in the repo.');
           btn.disabled = false;
           loading.style.display = 'none';
         });
