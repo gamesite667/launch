@@ -15,9 +15,11 @@
       font-family: Arial, sans-serif;
       overflow: hidden;
     }
+
     .container {
       text-align: center;
     }
+
     h1 {
       font-size: 3rem;
       margin: 0 0 20px 0;
@@ -27,11 +29,13 @@
       background-clip: text;
       letter-spacing: -0.04em;
     }
+
     .subtitle {
       color: #a5b4d3;
       margin: 0 0 40px 0;
       font-size: 1.1rem;
     }
+
     button {
       padding: 22px 60px;
       border: none;
@@ -44,23 +48,28 @@
       box-shadow: 0 18px 42px rgba(124, 156, 255, 0.45);
       transition: all 0.3s ease;
     }
+
     button:hover {
       transform: scale(1.08);
       box-shadow: 0 24px 60px rgba(124, 156, 255, 0.65);
     }
+
     button:active {
       transform: scale(0.95);
     }
+
     button:disabled {
       opacity: 0.6;
       cursor: not-allowed;
     }
+
     .loading {
       display: none;
       margin-top: 20px;
       color: #7c9cff;
       font-weight: 700;
     }
+
     .spinner {
       display: inline-block;
       width: 20px;
@@ -71,6 +80,7 @@
       animation: spin 0.8s linear infinite;
       margin-right: 10px;
     }
+
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
@@ -90,16 +100,16 @@
     function launchHub() {
       const btn = document.getElementById('launchBtn');
       const loading = document.getElementById('loadingMsg');
-      
+
       btn.disabled = true;
       loading.style.display = 'block';
 
-      // Point to the actual game hub (the one with games, not this launcher)
-      const siteUrl = 'https://raw.githubusercontent.com/gamesite667/launch/main/hub.html';
+      // Fetch hub.html from THIS repository (gamesite667/launch)
+      const hubUrl = 'https://raw.githubusercontent.com/gamesite667/launch/main/hub.html';
 
-      fetch(siteUrl)
+      fetch(hubUrl)
         .then(r => {
-          if (!r.ok) throw new Error('Hub not found');
+          if (!r.ok) throw new Error(`HTTP ${r.status}: ${r.statusText}`);
           return r.text();
         })
         .then(html => {
@@ -110,14 +120,16 @@
             loading.style.display = 'none';
             return;
           }
+
           w.document.write(html);
           w.document.close();
+
           btn.disabled = false;
           loading.style.display = 'none';
         })
         .catch(err => {
-          console.error(err);
-          alert('Failed to load hub. Make sure hub.html exists in the repo.');
+          console.error('Error:', err);
+          alert(`Failed to load hub:\n${err.message}\n\nMake sure hub.html exists at: ${hubUrl}`);
           btn.disabled = false;
           loading.style.display = 'none';
         });
